@@ -1,39 +1,17 @@
-import React from "react";
-import { Element } from "react-scroll";
-import Navbar from "./components/Navbar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import UploadPage from "./pages/UploadPage";
+import ForecastPage from "./pages/ForecastPage";
 
-import HomeSection from "./sections/HomeSection";
-import AnalyzeSection from "./sections/AnalyzeSection";
-import VisualizeSection from "./sections/VisualizeSection";
-import UploadSection from "./sections/UploadSection";
-import ExtraSection from "./sections/ExtraSection";
-
-const sections = [
-  { id: "home", label: "Home", component: <HomeSection /> },
-  { id: "analyze", label: "Analyze", component: <AnalyzeSection /> },
-  { id: "visualize", label: "Visualize", component: <VisualizeSection /> },
-  { id: "upload", label: "Upload", component: <UploadSection /> },
-  { id: "extra", label: "Extra", component: <ExtraSection /> },
-];
-
-const App: React.FC = () => {
+const App = () => {
   return (
-    <div className="font-sans">
-      <Navbar
-        sections={sections.map((s) => ({
-          id: s.id,
-          label: s.label,
-          color: "",
-        }))}
-      />
-      <main className="mt-[52px]">
-        {sections.map((s) => (
-          <Element key={s.id} name={s.id} id={s.id} className="scroll-mt-16">
-            {s.component}
-          </Element>
-        ))}
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/upload" element={<UploadPage />} />
+        <Route path="/forecast" element={<ForecastPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
