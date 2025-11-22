@@ -5,7 +5,8 @@ type Record = {
   Pressure: number;
 };
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_HOST = window.location.hostname;
+const API_BASE = `http://${API_HOST}:8000`;
 
 const AnalyzeSection: React.FC = () => {
   const [selfData, setSelfData] = useState<Record[]>([]);
@@ -53,7 +54,9 @@ const AnalyzeSection: React.FC = () => {
   if (error) {
     return (
       <div className="h-screen flex items-center justify-center bg-red-100 text-lg text-red-700">
+        {API_BASE}
         {error}
+        
       </div>
     );
   }

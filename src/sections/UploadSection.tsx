@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_HOST = window.location.hostname;
+const API_BASE = `http://${API_HOST}:8000`;
 
 const UploadSection: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
