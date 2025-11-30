@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import ChartView from "../components/ChartView";
 import PressureCard from "../components/PressureCard";
 import BackHome from "../components/BackHome";
-import WeatherTimeline from "../components/WeatherForecastCard";
+import WeatherTimeline from "../components/WeatherTimeline";
+import { formatTimestamp } from "../../utils/utils";
 
 import {
   getSelfData,
@@ -11,6 +12,7 @@ import {
   getPredictionWeather,
   type SelfRecord, type WeatherRecord, type PressurePrediction, type WeatherPrediction
 } from "../api/weatherApi";
+import HistoricalData from "../components/HistoricalData";
 
 type Range = "6h" | "12h" | "24h";
 type Tab = "forecast" | "historical";
@@ -94,16 +96,29 @@ const ForecastPage: React.FC = () => {
     
 
 
-  const current = pressureForecastData[range];
+    const current = pressureForecastData[range];
 
-  // ----- Combined Forecast + Actual Plot -----
-  const mergedLabels = current.labels;
-  const mergedData = [
-    ...(current.actual || []),
-    ...(current.forecast || []),
-  ];
+    // ----- Combined Forecast + Actual Plot -----
+    const mergedLabels = current.labels;
+    const mergedData = [
+      ...(current.actual || []),
+      ...(current.forecast || []),
+    ];
 
-  const actualLength = current.actual?.length;
+    const actualLength = current.actual?.length;
+
+  // 1️⃣ 取出壓力
+  const selfPressureArray = selfData?.map((d) => d.Pressure);
+  const weatherPressureArray = weatherData?.map((d) => d.pressure);
+
+  // 2️⃣ 用時間生成 labels（統一使用較長的那組）
+  const selfTimes = selfData?.map((d) => d.Time) || [];
+  const weatherTimes = weatherData?.map((d) => d.timestamp) || [];
+
+  const tsList =
+    selfTimes.length >= weatherTimes.length ? selfTimes : weatherTimes;
+
+  const labels = tsList.map((ts) => formatTimestamp(ts));
 
   return (
     <div className="w-[50vw] mx-auto p-6 flex flex-col gap-6">
@@ -186,22 +201,11 @@ const ForecastPage: React.FC = () => {
       {/* ---------- HISTORICAL TAB ---------- */}
       {tab === "historical" && (
         <div className="flex flex-col gap-6">
-          {/* Phyphox + OWM on same chart */}
-          {/* <ChartView
-            title={"Historical: Phyphox vs OWM"}
-            labels={["-3h", "-2h", "-1h", "now"]}
-            multiData={[
-              { label: "Phyphox", data: mockHistoricalPhy },
-              { label: "OpenWeatherMap", data: mockHistoricalOWM },
-            ]}
-          /> */}
-
-          {/* Fusion Data Only */}
-          {/* <ChartView
-            title="Fused Pressure (Historical)"
-            labels={["-3h", "-2h", "-1h", "now"]}
-            data={mockFusion}
-          /> */}
+          <HistoricalData
+            labels={labels}
+            selfPressureArray={selfPressureArray || []}
+            weatherPressureArray={weatherPressureArray || []}
+          />
         </div>
       )}
     </div>

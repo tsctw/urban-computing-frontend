@@ -16,7 +16,7 @@ interface ChartViewProps {
   title: string;
   labels: string[];
   data?: number[];
-  multiData?: { label: string; data: number[] }[];
+  multiData?: { label: string; data: (number | null)[] }[];
   splitIndex?: number; // for actual vs forecast
 }
 
@@ -34,8 +34,12 @@ const ChartView: React.FC<ChartViewProps> = ({
         label: d.label,
         data: d.data,
         borderWidth: 2,
-        borderColor: i === 0 ? "#2563eb" : "#16a34a", // blue + green
+        borderColor: i === 0 ? "#2563eb" : i === 1 ? "#16a34a" : "#faaa32ff", // blue + green + orange
         tension: 0.3,
+        spanGaps: true,
+        pointRadius: i === 0 ? 5 : 0,         // 有值時顯示小圓點
+        pointHoverRadius: i === 0 ? 5 : 0,    // hover 放大
+        pointStyle: i === 0 ? "circle" : false as const, 
       }));
     }
 
@@ -85,7 +89,64 @@ const ChartView: React.FC<ChartViewProps> = ({
           labels,
           datasets,
         }}
+        options={{
+
+          plugins: {
+            legend: {
+              position: "top",
+              labels: {
+                usePointStyle: true,
+                pointStyle: "circle",
+                padding: 20,
+                font: {
+                  size: 13,
+                  family: "Inter, sans-serif",
+                },
+              },
+            },
+
+            tooltip: {
+              mode: "index",
+              intersect: false,
+              padding: 12,
+              backgroundColor: "rgba(0,0,0,0.8)",
+              titleFont: { size: 14 },
+              bodyFont: { size: 13 },
+              boxPadding: 6,
+            },
+          },
+
+          hover: {
+            mode: "nearest",
+            intersect: false,
+          },
+
+          scales: {
+            y: {
+              ticks: {
+                font: {
+                  size: 12,
+                },
+              },
+              grid: {
+                color: "rgba(200,200,200,0.3)", // 淡灰色 → 看起來更柔和
+              },
+            },
+          },
+
+          elements: {
+            line: {
+              tension: 0.35, // ⭐ 線條更順、更像氣象儀表
+            },
+            point: {
+              radius: 0, // ⭐ 不讓所有點都淹滿地圖
+              hitRadius: 6,
+              hoverRadius: 4, // ⭐ hover 時才顯示點
+            },
+          },
+        }}
       />
+
     </div>
   );
 };

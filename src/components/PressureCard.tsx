@@ -1,9 +1,10 @@
-import { autoFormatNumber, weatherIcon } from "../../utils/utils";
+import { autoFormatNumber, formatTimestamp } from "../../utils/utils";
 import {
-  formatTimestamp,
   type SelfRecord,
   type WeatherRecord,
 } from "../api/weatherApi";
+
+import {iconFor} from '../../utils/weatherIcon';
 
 interface PressureCardProps {
   selfData: SelfRecord[];
@@ -40,7 +41,7 @@ const PressureCard: React.FC<PressureCardProps> = ({ selfData, weatherData }) =>
 
       {/* Weather with emoji */}
       <div className="text-lg opacity-90 flex items-center gap-2">
-        <span className="text-2xl">{weatherIcon(weather)}</span>
+        <span className="text-2xl">{iconFor(weather)}</span>
         <span>{weather}</span>
       </div>
 

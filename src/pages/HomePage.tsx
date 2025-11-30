@@ -61,6 +61,12 @@ const HomePage: React.FC = () => {
       >
         Upload Current Pressure (Phyphox)
       </button>
+      <button
+        className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md"
+        onClick={() => navigate("/forecast")}
+      >
+        View Forecast
+      </button>
     </div>
   );
 };

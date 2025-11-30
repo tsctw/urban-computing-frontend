@@ -23,32 +23,17 @@ export function autoFormatNumber(num: number): number {
   return Number(num.toFixed(2));
 }
 
-// Weather → emoji icon (day/night aware)
-export const weatherIcon = (condition: string) => {
-  const hour = new Date().getHours(); // 使用者本地時間
-
-  const isDay = hour >= 6 && hour < 18;
-
-  switch (condition) {
-    case "Clear":
-      return isDay ? "☀️" : "🌙";   // 白天太陽 / 晚上月亮
-
-    case "Clouds":
-      return isDay ? "🌤️" : "☁️";   // 白天帶太陽的雲 / 晚上雲
-
-    case "Rain":
-      return "🌧️";
-
-    case "Drizzle":
-      return isDay  ? "🌦️" : "🌧️";
-
-    case "Snow":
-      return "❄️";
-
-    case "Thunderstorm":
-      return "⛈️";
-
-    default:
-      return "🌫️"; // Mist / Fog / Others
-  }
+// -----------------------------
+// change timestamp → datetime format
+// -----------------------------
+export const formatTimestamp = (ts?: number | null): string => {
+  if (!ts) return "";
+  const ms = ts < 1e12 ? ts * 1000 : ts;
+  return new Date(ms).toLocaleString("en-US", {
+    year: "numeric",
+    month: "short", // Jan, Feb, Mar...
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };

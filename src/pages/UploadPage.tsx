@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackHome from "../components/BackHome";
+import { uploadZip } from "../api/weatherApi";
 
 const UploadPage: React.FC = () => {
   const navigate = useNavigate();
@@ -9,9 +10,13 @@ const UploadPage: React.FC = () => {
   const handleUpload = async () => {
     if (!file) return;
 
-    setTimeout(() => {
+    try {
+      const result = await uploadZip(file);
+      console.log(`Upload success: ${result.file}`);
       navigate("/forecast");
-    }, 800);
+    } catch (err: any) {
+      console.error(`Upload failed: ${err.message}`);
+    }
   };
 
   return (

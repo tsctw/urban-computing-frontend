@@ -56,6 +56,19 @@ export interface WeatherPrediction {
     w24: string[];
 }
 
+export interface WeatherMergedResponse {
+  status: string;
+  records: WeatherMergedRecord[];
+}
+
+export interface WeatherMergedRecord {
+  timestamp: number;
+  pressure: number;
+  Pressure_self: number | null;
+  Pressure_self_corrected: number;
+  weather_main: string;
+}
+
 const API_BASE = "http://127.0.0.1:8000";
 
 // -----------------------------
@@ -76,15 +89,6 @@ export const getOpenWeatherData = async (): Promise<OpenWeatherResponse> => {
   return res.json();
 };
 
-// -----------------------------
-// change timestamp → datetime format
-// -----------------------------
-export const formatTimestamp = (ts?: number | null): string => {
-  if (!ts) return "";
-  const ms = ts < 1e12 ? ts * 1000 : ts;
-  return new Date(ms).toLocaleString();
-};
-
 // ---------------------------------------------
 // /prediction_pressure
 // ---------------------------------------------
@@ -101,4 +105,37 @@ export const getPredictionWeather = async (): Promise<WeatherPredictionResponse>
   const res = await fetch(`${API_BASE}/prediction_weather`);
   if (!res.ok) throw new Error("Failed to fetch /prediction_weather");
   return res.json();
+};
+
+export const getHistoricalWeather = async (): Promise<WeatherMergedRecord[]> => {
+  const res = await fetch(`${API_BASE}/historical_weather`);
+  if (!res.ok) throw new Error("Failed to fetch merged pressure data");
+
+  const json = await res.json();
+
+  if (json.status !== "success") {
+    throw new Error("API returned non-success status");
+  }
+
+  // ❗ 後端 records 是 JSON 字串，必須 parse
+  const parsedRecords: WeatherMergedRecord[] = JSON.parse(json.records);
+
+  return parsedRecords
+};
+
+export const uploadZip = async (file: File): Promise<any> => {
+  const formData = new FormData();
+  formData.append("file", file); // FastAPI param name must match
+
+  const res = await fetch(`${API_BASE}/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.detail || "Upload failed");
+  }
+
+  return res.json(); // {status: "...", file: "..."}
 };

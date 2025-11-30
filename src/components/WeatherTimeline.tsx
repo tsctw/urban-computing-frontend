@@ -99,7 +99,6 @@ export default function WeatherTimeline({ weather, range }: Props) {
               </div>
             );
           })}
-
         </div>
       </div>
     </div>
