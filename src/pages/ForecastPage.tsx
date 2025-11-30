@@ -107,11 +107,9 @@ const ForecastPage: React.FC = () => {
 
     const actualLength = current.actual?.length;
 
-  // 1️⃣ 取出壓力
   const selfPressureArray = selfData?.map((d) => d.Pressure);
   const weatherPressureArray = weatherData?.map((d) => d.pressure);
 
-  // 2️⃣ 用時間生成 labels（統一使用較長的那組）
   const selfTimes = selfData?.map((d) => d.Time) || [];
   const weatherTimes = weatherData?.map((d) => d.timestamp) || [];
 
@@ -176,7 +174,7 @@ const ForecastPage: React.FC = () => {
               title={`Actual + Forecast (${range})`}
               labels={mergedLabels}
               data={mergedData}
-              splitIndex={actualLength}  // <--- 新增參數：告訴 component 何處開始變成預測線
+              splitIndex={actualLength}
             />
           ) : (
             <p className="text-red-600">Unable to load data.</p>

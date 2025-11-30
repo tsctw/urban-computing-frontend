@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { weatherIcon } from "../../utils/utils";
+import { iconFor } from "../../utils/weatherIcon";
 
 export type Range = "6h" | "12h" | "24h";
 
@@ -13,7 +13,7 @@ interface Props {
   range: Range;
 }
 
-// Past labels (每 2 小時)
+// Past labels every two hours
 const buildPastLabels = (count: number) =>
   Array.from({ length: count }, (_, i) => count - i - 1 == 0 ? 'Now' : `-${(count - i - 1) * 2}h`);
 
@@ -39,7 +39,6 @@ export default function WeatherTimeline({ weather, range }: Props) {
   const pastLabels = buildPastLabels(past.length);
   const futureLabels = buildFutureLabels(future.length);
 
-  // ✔ 自動 Scroll 到 Now
   useEffect(() => {
     if (nowItemRef.current && scrollContainer.current) {
       const container = scrollContainer.current;
@@ -67,16 +66,18 @@ export default function WeatherTimeline({ weather, range }: Props) {
           ref={scrollContainer}
           className="flex overflow-x-auto space-x-8 pb-4 scrollbar-thin scrollbar-thumb-gray-700"
         >
-
+      
           {/* ---- Past: last10 ---- */}
-          {past.map((cond, index) => (
+          {past.map((cond, index) => {
+            return (
             <div key={`past-${index}`} className="flex flex-col items-center min-w-[60px] opacity-60">
               <div className="text-sm text-gray-400 mb-1">{pastLabels[index]}</div>
               <div className="w-1 h-6 bg-gray-700 rounded-full mb-2"></div>
-              <div className="text-3xl">{weatherIcon(cond)}</div>
+              <div className="text-3xl">{iconFor(cond)}</div>
               <div className="text-xs text-gray-500 mt-1">{cond}</div>
             </div>
-          ))}
+          )}
+          )}
 
           {/* ---- Future: w6/w12/w24 ---- */}
           {future.map((cond, index) => {
@@ -94,7 +95,7 @@ export default function WeatherTimeline({ weather, range }: Props) {
 
                 <div className={`w-1 h-6 rounded-full mb-2 ${isNow ? "bg-white" : "bg-gray-600"}`}></div>
 
-                <div className="text-3xl">{weatherIcon(cond)}</div>
+                <div className="text-3xl">{iconFor(cond)}</div>
                 <div className="text-xs text-gray-400 mt-1">{cond}</div>
               </div>
             );

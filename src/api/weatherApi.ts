@@ -117,7 +117,6 @@ export const getHistoricalWeather = async (): Promise<WeatherMergedRecord[]> => 
     throw new Error("API returned non-success status");
   }
 
-  // ❗ 後端 records 是 JSON 字串，必須 parse
   const parsedRecords: WeatherMergedRecord[] = JSON.parse(json.records);
 
   return parsedRecords

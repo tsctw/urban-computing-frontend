@@ -37,8 +37,8 @@ const ChartView: React.FC<ChartViewProps> = ({
         borderColor: i === 0 ? "#2563eb" : i === 1 ? "#16a34a" : "#faaa32ff", // blue + green + orange
         tension: 0.3,
         spanGaps: true,
-        pointRadius: i === 0 ? 5 : 0,         // 有值時顯示小圓點
-        pointHoverRadius: i === 0 ? 5 : 0,    // hover 放大
+        pointRadius: i === 0 ? 5 : 0, 
+        pointHoverRadius: i === 0 ? 5 : 0, 
         pointStyle: i === 0 ? "circle" : false as const, 
       }));
     }
@@ -129,19 +129,19 @@ const ChartView: React.FC<ChartViewProps> = ({
                 },
               },
               grid: {
-                color: "rgba(200,200,200,0.3)", // 淡灰色 → 看起來更柔和
+                color: "rgba(200,200,200,0.3)",
               },
             },
           },
 
           elements: {
             line: {
-              tension: 0.35, // ⭐ 線條更順、更像氣象儀表
+              tension: 0.35,
             },
             point: {
-              radius: 0, // ⭐ 不讓所有點都淹滿地圖
+              radius: 0,
               hitRadius: 6,
-              hoverRadius: 4, // ⭐ hover 時才顯示點
+              hoverRadius: 4,
             },
           },
         }}

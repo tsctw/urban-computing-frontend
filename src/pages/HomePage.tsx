@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="p-6 flex flex-col gap-6">
-      <h1 className="text-3xl font-bold">Barometric Forecast App</h1>
+      <h1 className="text-3xl font-bold">Barometric Forecast App - Dublin</h1>
 
       {loading ? (
         <p className="text-gray-600">Loading latest data...</p>
